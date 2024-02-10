@@ -634,4 +634,18 @@ export const strategyConfig: DeployParams = {
       version: "v1.0",
     },
   },
+  // dev1
+  313371: {
+    "donation-voting-merkle-distribution-direct": {
+      name: "DonationVotingMerkleDistributionDirectTransferStrategy",
+      version: "v1.0",
+    },
+  },
+  // dev2
+  313372: {
+    "donation-voting-merkle-distribution-direct": {
+      name: "DonationVotingMerkleDistributionDirectTransferStrategy",
+      version: "v1.0",
+    },
+  },
 };

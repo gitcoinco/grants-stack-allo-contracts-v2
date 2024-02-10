@@ -1,11 +1,7 @@
-const { BigNumber } = require('ethers');
+const { BigNumber } = require("ethers");
 import hre, { ethers } from "hardhat";
 import { Validator } from "../utils/Validator";
-import {
-  Deployments,
-  delay,
-  verifyContract
-} from "../utils/scripts";
+import { Deployments, delay, verifyContract } from "../utils/scripts";
 
 export async function deployContractFactory() {
   const network = await ethers.provider.getNetwork();
