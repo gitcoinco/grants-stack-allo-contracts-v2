@@ -54,8 +54,11 @@ export async function deployContractFactory() {
   };
 
   deploymentIo.write(objToWrite);
-  await delay(20000);
-  await verifyContract(instance.target.toString(), []);
+
+  if (process.env.SKIP_VERIFICATION !== "true") {
+    await delay(20000);
+    await verifyContract(instance.target.toString(), []);
+  }
 
   const validator = await new Validator("ContractFactory", instance.target);
 

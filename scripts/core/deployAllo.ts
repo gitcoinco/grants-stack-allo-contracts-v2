@@ -4,7 +4,7 @@ import { Validator } from "../utils/Validator";
 import {
   Deployments,
   getImplementationAddress,
-  verifyContract
+  verifyContract,
 } from "../utils/scripts";
 
 export async function deployAllo() {
@@ -48,7 +48,8 @@ export async function deployAllo() {
   const feeData = await ethers.provider.getFeeData();
 
   const Allo = await ethers.getContractFactory("Allo");
-  const instance = await upgrades.deployProxy(Allo,
+  const instance = await upgrades.deployProxy(
+    Allo,
     [
       alloParams.owner,
       registryAddress,
@@ -60,7 +61,7 @@ export async function deployAllo() {
       txOverrides: {
         maxFeePerGas: feeData.maxFeePerGas,
         maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-      }
+      },
     }
   );
 
@@ -68,14 +69,14 @@ export async function deployAllo() {
 
   let implementation;
   try {
-    implementation = await getImplementationAddress(
-      instance.target as string,
-    );
+    implementation = await getImplementationAddress(instance.target as string);
   } catch (error) {
     console.error("Error getting implementation address: ", error);
   }
 
-  const proxyAdmin = await upgrades.erc1967.getAdminAddress(instance.target as string);
+  const proxyAdmin = await upgrades.erc1967.getAdminAddress(
+    instance.target as string
+  );
   let proxyAdminOwner = account.address;
 
   console.log("Allo Proxy deployed to:", instance.target);
@@ -99,7 +100,10 @@ export async function deployAllo() {
 
   deployments.write(objToWrite);
 
-  if (implementation) {
+  if (
+    implementation !== undefined &&
+    process.env.SKIP_VERIFICATION !== "true"
+  ) {
     await verifyContract(instance.target.toString(), []);
     await verifyContract(implementation, []);
   }
@@ -110,7 +114,7 @@ export async function deployAllo() {
   await validator.validate(
     "getPercentFee",
     [],
-    alloParams.percentFee.toString(),
+    alloParams.percentFee.toString()
   );
   await validator.validate("getBaseFee", [], alloParams.baseFee.toString());
   await validator.validate("owner", [], alloParams.owner.toString());

@@ -4,7 +4,7 @@ import { Validator } from "../utils/Validator";
 import {
   Deployments,
   getImplementationAddress,
-  verifyContract
+  verifyContract,
 } from "../utils/scripts";
 
 export async function deployRegistry() {
@@ -49,22 +49,22 @@ export async function deployRegistry() {
       txOverrides: {
         maxFeePerGas: feeData.maxFeePerGas,
         maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
-      }
+      },
     }
   );
 
   await instance.waitForDeployment();
-  
+
   let implementation;
   try {
-    implementation = await getImplementationAddress(
-      instance.target as string,
-    );
+    implementation = await getImplementationAddress(instance.target as string);
   } catch (error) {
     console.error("Error getting implementation address: ", error);
   }
 
-  const proxyAdmin = await upgrades.erc1967.getAdminAddress(instance.target as string);
+  const proxyAdmin = await upgrades.erc1967.getAdminAddress(
+    instance.target as string
+  );
   let proxyAdminOwner = account.address;
 
   console.log("Registry proxy deployed to:", instance.target);
@@ -84,7 +84,10 @@ export async function deployRegistry() {
 
   deployments.write(objToWrite);
 
-  if (implementation) {
+  if (
+    implementation !== undefined &&
+    process.env.SKIP_VERIFICATION !== "true"
+  ) {
     await verifyContract(instance.target.toString(), []);
     await verifyContract(implementation, []);
   }
@@ -96,7 +99,7 @@ export async function deployRegistry() {
   await validator.validate(
     "hasRole",
     [ownerRole, registryParams.owner],
-    "true",
+    "true"
   );
 
   return instance.target;
