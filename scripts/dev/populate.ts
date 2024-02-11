@@ -57,7 +57,12 @@ async function uploadFileToPinata(b: Buffer): Promise<string> {
 }
 
 export async function main() {
-  console.log(`🟡 Populating Allo V2 (pinataBaseUrl ${pinataBaseUrl})`);
+  const [account] = await ethers.getSigners();
+  const accountAddress = await account.getAddress();
+
+  console.log(
+    `🟡 Allo V2 - Populating (address: ${accountAddress}, pinataBaseUrl ${pinataBaseUrl})`
+  );
   if (hre.network.name !== "dev1" && hre.network.name !== "dev2") {
     console.error("This script can only be use in local dev environments");
     process.exit(1);
@@ -65,7 +70,6 @@ export async function main() {
 
   const network = await ethers.provider.getNetwork();
   const chainId = Number(network.chainId);
-  const account = (await ethers.getSigners())[0];
   const deployments = new Deployments(chainId, "allo");
   const registryAddress = deployments.getRegistry();
 
