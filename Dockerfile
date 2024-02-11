@@ -11,6 +11,10 @@ WORKDIR /app
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN ~/.foundry/bin/foundryup
 
+# init a git repo just to avoid having `forge install` fail
+RUN git init
+RUN /root/.foundry/bin/forge install
+
 # RUN bun install
 RUN corepack enable
 RUN pnpm install
