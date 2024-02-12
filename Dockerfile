@@ -39,6 +39,14 @@ ENV PATH="/root/.foundry/bin:$PATH"
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+
+###########################################################
+# TEMPORARILY REMOVE SOME STRATEGIES TO AVOID BUILD ERRORS
+# (memory access out of bounds)
+###########################################################
+RUN rm -rf contracts/strategies/_poc/
+
+
 RUN npx hardhat compile
 
 EXPOSE 8545/tcp
