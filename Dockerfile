@@ -47,6 +47,7 @@ RUN corepack enable
 RUN rm -rf contracts/strategies/_poc/
 
 
-RUN npx hardhat compile
+# test private key required at hardhat load time
+RUN env DEPLOYER_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 npx hardhat compile
 
 EXPOSE 8545/tcp
