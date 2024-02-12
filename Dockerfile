@@ -12,7 +12,6 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 RUN ~/.foundry/bin/foundryup
 
 RUN /root/.foundry/bin/forge install
-RUN ls lib/solady/src/auth/Ownable.sol
 RUN rm -rf .git
 
 # RUN bun install
@@ -40,7 +39,6 @@ ENV PATH="/root/.foundry/bin:$PATH"
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-
-RUN pnpm run build
+RUN npx hardhat compile
 
 EXPOSE 8545/tcp
